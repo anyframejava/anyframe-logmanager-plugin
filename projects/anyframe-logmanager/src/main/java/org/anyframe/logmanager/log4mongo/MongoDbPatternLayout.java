@@ -25,6 +25,7 @@ import org.apache.log4j.spi.LoggingEvent;
 /**
  * 
  * @author Jaehyoung Eum
+ * @deprecated use org.anyframe.logmanager.log4j.MongoDbAppender
  */
 public class MongoDbPatternLayout extends PatternLayout {
 	private StringBuffer buf = new StringBuffer(BUF_SIZE);

@@ -20,11 +20,11 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import org.anyframe.exception.BaseException;
+import org.anyframe.exception.BaseRuntimeException;
 import org.anyframe.plugin.common.MovieFinderException;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.framework.Advised;
@@ -41,14 +41,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class ExceptionTransfer {
 
-	@Pointcut("execution(* org.anyframe.plugin.logmanager..*Impl.*(..))")
-	public void serviceMethod() {
-	}
-
 	@Inject
 	private MessageSource messageSource;
 
-	@AfterThrowing(pointcut = "serviceMethod()", throwing = "exception")
+	@AfterThrowing(pointcut = "execution(* org.anyframe.plugin..*Impl.*(..))", throwing = "exception")
 	public void transfer(JoinPoint thisJoinPoint, Exception exception) throws MovieFinderException {
 		Object target = thisJoinPoint.getTarget();
 		while (target instanceof Advised) {
@@ -72,6 +68,11 @@ public class ExceptionTransfer {
 
 		if (exception instanceof BaseException) {
 			BaseException baseEx = (BaseException) exception;
+			logger.error(baseEx.getMessage(), baseEx);
+		}
+		
+		if (exception instanceof BaseRuntimeException) {
+			BaseRuntimeException baseEx = (BaseRuntimeException) exception;
 			logger.error(baseEx.getMessage(), baseEx);
 		}
 

@@ -1,17 +1,17 @@
 	<chapter id="logmanager_configuration">
 		<title>Configuration</title>
 		<para>
-			Anyframe Log Manager와 연동하는 것 별도의 추가 코딩 없이 간단한 설정만으로 가능하다.
-			Log Manager에서 제공하는 기능 중 로그 조회 기능을 사용하기 위해서는 로그 저장소로 사용되는 Mongodb에 로그를 저장해야 하므로
-			log4j.xml 파일에 Appender와 layout을 추가 정의해야한다.
+			Anyframe Log Manager와 연동하는 작업은 별도의 추가 코딩 없이 간단한 설정만으로 가능하다.
+			Log Manager plugin에서 제공하는 기능 중 로그 조회 기능을 사용하기 위해서는 로그 저장소로 사용되는 MongoBb에 로그를 저장해야 하므로
+			log4j.xml(또는 logback.xml) 파일에 Appender를 추가 정의해야한다.
 			
-			또한, 로그 레벨 변경 기능은 WAS의 재기동없이 log4j.xml 파일을 reload 해야하므로 web.xml 파일에 MDCServletFilter를 정의해 준다. 
+			또한, 로그 레벨 변경 기능은 WAS의 재기동없이 log4j.xml 파일을 reload 해야하므로 web.xml 파일에 MDCServletFilter를 정의해 준다.(Logback을 사용하는 경우에는 불필요)
 			이 밖에도 MDCServletFilter를 통해 프로젝트에서 정의한 Custom Data에 대해서 로그를 남길 수 있다. 
 		</para>
-		<section id="logmanager_configuration_log4j"><title>log4j.xml</title>
+		<section id="logmanager_configuration_log4j"><title>Logging Policy File(log4j.xml)</title>
 			<para>먼저, Anyframe Log Manager는 로그 저장소로 MongoDB를 사용하므로 Legacy Application에서도 
 			마찬가지로 로그 저장소로 MongoDB를 사용해야한다. 이를 위해 Log4j.xml 파일에 log4mongo에서 제공하는 MongoDbAppender를
-			확장한 org.anyframe.logmanager.log4mongo.MongoDbPatternLayoutAppender를 정의한다. 이 때, MongoDB와의 연결
+			확장한 org.anyframe.logmanager.log4j.MongoDbAppender를 정의한다. 이 때, MongoDB와의 연결
 			정보를 정의하기 위해 아래와 같은 Parameter를 제공하며 정의하지 않을 시 Default Value로 등록된다. 
 			</para>
 		<informaltable>
@@ -26,34 +26,34 @@
 				</thead>
 				<tbody>
 					<row>
-						<entry align="center">hostname</entry>
-						<entry align="center">localhost</entry>
+						<entry align="left">hostname</entry>
+						<entry align="left">localhost</entry>
 					</row>
 					<row>
-						<entry align="center">port</entry>
-						<entry align="center">27017</entry>
+						<entry align="left">port</entry>
+						<entry align="left">27017</entry>
 					</row>
 					<row>
-						<entry align="center">databaseName</entry>
-						<entry align="center">log4mongo</entry>
+						<entry align="left">databaseName</entry>
+						<entry align="left">log4mongo</entry>
 					</row>
 					<row>
-						<entry align="center">collectionName</entry>
-						<entry align="center">log</entry>
+						<entry align="left">collectionName</entry>
+						<entry align="left">log</entry>
 					</row>
 					<row>
-						<entry align="center">userName</entry>
-						<entry align="center">undefined</entry>
+						<entry align="left">userName</entry>
+						<entry align="left"></entry>
 					</row>
 					<row>
-						<entry align="center">password</entry>
-						<entry align="center">undefined</entry>
+						<entry align="left">password</entry>
+						<entry align="left"></entry>
 					</row>
 				</tbody>
 			</tgroup>
 		</informaltable>
-		<para>다음은 Anyframe Log Manager Plugin에서 정의한 log4j.xml 파일의 MongoDbPatternLayoutAppender 정의 부분의 일부이다. </para>
-			<programlisting language="xml"><![CDATA[<appender class="org.anyframe.logmanager.log4mongo.MongoDbPatternLayoutAppender" name="mongodb">
+		<para>다음은 Anyframe Log Manager Plugin에서 정의한 log4j.xml 파일의 MongoDbAppender 정의 부분의 일부이다. </para>
+			<programlisting language="xml"><![CDATA[<appender class="org.anyframe.logmanager.log4j.MongoDbAppender" name="mongodb">
 	<param name="hostname" value="localhost"/>
 	<param name="port" value="27017"/>
 	<param name="databaseName" value="logs"/>
@@ -67,16 +67,6 @@
     <level value="DEBUG"/>
     ]]><emphasis role="bold"><![CDATA[<appender-ref ref="mongodb"/>]]></emphasis><![CDATA[
 </logger>]]></programlisting>
-		<para>이 때, 어떠한 형태로 로그를 남길 것인지에 대해 layout을 정의해 줘야 한다. layout class는 
-		org.log4mongo.MongoDbPatternLayout을 확장한 
-		org.anyframe.logmanager.log4mongo.MongoDbPatternLayout을 지정하며 ConversionPattern을 사용하여 "key:value" 쌍의 JSON document 형태를 사용한다. </para>
-		<programlisting language="xml"><![CDATA[<appender class="org.anyframe.logmanager.log4mongo.MongoDbPatternLayoutAppender" name="mongodb">
-	<layout class="org.anyframe.logmanager.log4mongo.MongoDbPatternLayout">
-		<param name="ConversionPattern" value="level:%p,thread:%t,message:%m,className:%C,methodName:%M,lineNumber:%L"/>
-	</layout>
-	<param... />
-</appender>]]></programlisting>
-	<para>패턴 정의 방법은 일반적인 Log4j의 패턴을 사용할 때와 같다.</para>
 	</section>
 	<section id="logmanager_configuration_webxml">
 	<title>web.xml</title>
@@ -98,19 +88,19 @@
 							</thead>
 							<tbody>
 								<row>
-									<entry align="center">log4jFile</entry>
+									<entry align="left">log4jFile</entry>
 									<entry>log4j 설정 파일의 이름</entry>
-									<entry align="center">log4j.xml</entry>
+									<entry align="left">log4j.xml</entry>
 								</row>
 								<row>
-									<entry align="center">log4jDynamicReload</entry>
+									<entry align="left">log4jDynamicReload</entry>
 									<entry>log4j.xml 파일의 Dynamic Reload 여부</entry>
-									<entry align="center">true</entry>
+									<entry align="left">true</entry>
 								</row>
 								<row>
-									<entry align="center">log4jDynamicReloadPeriod</entry>
+									<entry align="left">log4jDynamicReloadPeriod</entry>
 									<entry>log4j.xml 파일의 변경을 체크하는 주기(milliseconds)</entry>
-									<entry align="center">60000</entry>
+									<entry align="left">60000</entry>
 								</row>
 							</tbody>
 						</tgroup>
@@ -154,9 +144,7 @@
 				log4jRefreshInterval 속성을 정의함으로써 변경 체크 주기를 
 				설정할 수 있다. 위의 코드처럼 설정할 경우 classpath의 log4j.xml에 대해 60초 주기로 변경을 체크하게 될 것이다. </para>
 				</note>
-		<para>일반적으로 Log4j를 사용하여 로그를 남길 때, Log4j에서 제공하는 %d, %p, %m등의 패턴을 통해서 날짜, 로그레벨, 메시지를 남길 수 있다.
-		이 밖에, 프로젝트에서 로그로 남기고 싶은 정보가 있다면 web.xml 파일에 Anyframe의 MDCServletFilter의 sessionAttributes로 해당 데이터의 key 값을 정의하고 
-		log4j.xml %X패턴을 정의하여 적용시킬 수 있다. </para>
+		<para>프로젝트에서 로그로 남기고 싶은 정보가 있다면 web.xml 파일에 Anyframe의 MDCServletFilter의 sessionAttributes로 해당 데이터의 key 값을 정의하여 적용시킬 수 있다. </para>
 		<programlisting language="xml"><![CDATA[<web-app..>
 	<filter>
 		<filter-name>MDCServletFilter</filter-name>
@@ -172,15 +160,9 @@
 	</filter-mapping>
 </web-app>]]></programlisting>
 	<para>위와 같이 Filter를 정의하면 기본적으로 Application Name, Client IP, Server Name을 로그로 남길 수 있다. 이 때, log4j의 ConversionPattern에
-	%X{key}를 사용하여 출력할 수 있으며 각각의 key값은 appName, clientIp, serverName이 된다. 다음은 이를 정의한 log4j.xml파일의 일부이다.</para>
-	<programlisting language="xml"><![CDATA[<appender class="org.anyframe.logmanager.log4mongo.MongoDbPatternLayoutAppender" name="mongodb">
-   	<layout class="org.anyframe.logmanager.log4mongo.MongoDbPatternLayout">
-   		<param name="ConversionPattern" value="clientIp:%X{clientIp},serverId:%X{serverId},appName:%X{appName}"/>
-   	</layout>
-	<param .../>
-</appender>]]></programlisting>
+	%X{key}를 사용하여 출력할 수 있으며 각각의 key값은 appName, clientIp, serverName이 된다. </para>
 	<para>MDCServletFilter에서는 내부적으로 MDC를 통해 로그로 출력해줄 요소를 key, value쌍으로 put, remove하는 로직을 수행하고 있다.
-	이는 log4j의 ConversionPattern에 %X{key}의 형태로 정의함으로써 MDC를 통해 ThreadLocal에 저장된 값을 로그로 출력할 수 있다.
+	이는 log4j(또는 logback)의 ConversionPattern에 %X{key}의 형태로 정의함으로써 MDC를 통해 ThreadLocal에 저장된 값을 로그로 출력할 수 있다.
 	이미 MDCServletFilter에 의해 MDC에 저장된 appName, clientIp, serverName이외에 출력해야할 정보가 있다면 아래와 같이 설정해 줄 수 있다.</para>
 	<itemizedlist>
 		<listitem>
@@ -219,16 +201,35 @@ public String login(@Valid User user, BindingResult results, HttpSession session
 	</filter>
 </web-app>]]></programlisting>
 		</listitem>
-		<listitem>
-			<para>MDC를 통해 ThreadLocal에 저장된 값을 mongodb를 통해 로그로 출력하기 위해 MongoDB Appender의 ConversionPattern에
-			%X{key}를 사용하여 정의한다. </para>
-			<programlisting language="xml"><![CDATA[<appender class="org.anyframe.logmanager.log4mongo.MongoDbPatternLayoutAppender" name="mongodb">
-	<layout class="org.anyframe.logmanager.log4mongo.MongoDbPatternLayout">
-		]]><emphasis role="bold"><![CDATA[<param name="ConversionPattern" value="userId:%X{userId}"/>]]></emphasis><![CDATA[
-	</layout>
-	<param ... />
-</appender>]]></programlisting>
-		</listitem>
 	</itemizedlist>
 		</section>
+		<note>
+			<title>Logging Framework으로 Logback을 사용하는 경우</title>
+			<para>Logging Framework으로 <ulink url="http://logback.qos.ch">logback</ulink>을 사용하는 경우에는 위에서 언급한 로그 정책의 자동재반영을 기본적으로 지원하고 있기 때문에 log4jFile, log4jDynamicReload, log4jDynamicReloadPeriod의 세 가지 항목을 설정할 필요가 없다</para>
+			<para>Logback에서 로그 정책을 자동으로 재반영하고 싶은 경우에는 아래와 같이 logback.xml의 configuration 항목에 scan과 scanPeriod 속성을 정의하면 된다.</para>
+			<programlisting language="xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<configuration ]]><emphasis role="bold"><![CDATA[scan="true" scanPeriod="60 seconds"]]></emphasis><![CDATA[>
+
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>[%-5level] %d{yyyy-MM-dd HH:mm:ss} %logger %n%msg%n
+			</pattern>
+		</encoder>
+	</appender>
+	
+	...
+
+	<root level="ERROR">
+		<appender-ref ref="console"/>
+	</root>
+
+</configuration>]]></programlisting>
+			<para>Anyframe에서는 <ulink url="http://dev.anyframejava.org/docs/anyframe/plugin/optional/logback/1.0.0/reference/htmlsingle/logback.html">Anyframe Logback plugin</ulink>을 통해 보다 상세한 사용법과 Library Dependency를 제공하고 있다.</para>
+			<para>Logback에관한 보다 자세한 내용은 <ulink url="http://logback.qos.ch">http://logback.qos.ch</ulink>에서 확인할 수 있다.</para>
+		</note>
+		<note>
+			<title>Logging Framework 설치에 따른 Log4j와 Logback 지원 문제</title>
+			<para>Anyframe Log Manager plugin은 Log4j와 Logback에 대한 지원만을 담당할 뿐 해당 Logging Framework에 대한 Library는 제공하지 않습니다.</para>
+			<para>따라서 해당 프로젝트에 <ulink url="http://dev.anyframejava.org/docs/anyframe/plugin/essential/core/1.5.0.RC1/reference/htmlsingle/core.html#core_logging_part">Logging plugin</ulink>이 설치되어 있는 경우에는 Log4j을, <ulink url="http://dev.anyframejava.org/docs/anyframe/plugin/optional/logback/1.0.0/reference/htmlsingle/logback.html">Logback plugin</ulink>이 설치되어 있는 경우에는 Logback을 지원 하도록 동작합니다.</para>
+		</note>
 </chapter>

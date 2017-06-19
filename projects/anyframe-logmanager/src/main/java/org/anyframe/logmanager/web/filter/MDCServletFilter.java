@@ -36,12 +36,12 @@ import org.slf4j.MDC;
 /**
  * 
  * @author Heewon Jung
- *
+ * @author Alex Eum
  */
 public class MDCServletFilter implements Filter {
-	
+
 	public static final String CLIENT_IP = "clientIp";
-	public static final String SERVER_ID = "serverId";
+	// public static final String SERVER_ID = "serverId";
 	public static final String APP_NAME = "appName";
 	public static final String SESSION_ATTRIBUTES_PARAM = "sessionAttributes";
 	public static final String DEFAULT_LOG4J_INIT_FILE = "log4j.xml";
@@ -49,33 +49,35 @@ public class MDCServletFilter implements Filter {
 	public static final String LOG4J_INIT_FILE_PARAM = "log4jFile";
 	public static final String LOG4J_ENABLE_PARAM = "log4jDynamicReload";
 	public static final String LOG4J_PERIOD_PARAM = "log4jDynamicReloadPeriod";
-	
+
 	private FilterConfig config;
-	
+
 	public void init(FilterConfig config) throws ServletException {
 		this.config = config;
-		
+
 		boolean isLog4jReloadEnable = checkLog4jReloadEnable();
-		if(isLog4jReloadEnable){
+		if (isLog4jReloadEnable) {
 			String log4jFileName = getLog4jInitFileName();
 			long log4jPeriod = getLog4jReloadPeriod();
-			
-			URL url = Loader.getResource(log4jFileName);
-			if(log4jPeriod == 0){
-				DOMConfigurator.configureAndWatch(url.getFile());
-			}else{
-				DOMConfigurator.configureAndWatch(url.getFile(), log4jPeriod);
+			try{
+				URL url = Loader.getResource(log4jFileName);
+				if (log4jPeriod == 0) {
+					DOMConfigurator.configureAndWatch(url.getFile());
+				} else {
+					DOMConfigurator.configureAndWatch(url.getFile(), log4jPeriod);
+				}	
+			}catch(Exception e){
+				// not support log4j case
 			}
 		}
 	}
-	
-	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
-			FilterChain chain) throws IOException, ServletException {
+
+	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) servletRequest;
-		
+
 		String sessionAttrs = config.getInitParameter("sessionAttributes");
 		String[] sessionAttr = sessionAttrs.split(",");
-		
+
 		boolean bAdded = false;
 		putSessionAttr(request, request.getSession(), sessionAttr);
 		bAdded = true;
@@ -88,7 +90,7 @@ public class MDCServletFilter implements Filter {
 			}
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param sessionAttr
@@ -102,7 +104,7 @@ public class MDCServletFilter implements Filter {
 				MDC.remove(sessionAttr[i]);
 		}
 		MDC.remove(CLIENT_IP);
-		MDC.remove(SERVER_ID);
+		// MDC.remove(SERVER_ID);
 		MDC.remove(APP_NAME);
 	}
 
@@ -122,8 +124,7 @@ public class MDCServletFilter implements Filter {
 						String propKey = sessionProp[1];
 						String propValue = "";
 						try {
-							propValue = BeanUtils.getProperty(
-									sessionObject, propKey);
+							propValue = BeanUtils.getProperty(sessionObject, propKey);
 						} catch (IllegalAccessException e) {
 							e.printStackTrace();
 						} catch (InvocationTargetException e) {
@@ -138,52 +139,42 @@ public class MDCServletFilter implements Filter {
 					}
 				}
 			} else if (session.getAttribute(sessionAttr[i]) != null) {
-				String propValue = (String)session.getAttribute(sessionAttr[i]);
+				String propValue = (String) session.getAttribute(sessionAttr[i]);
 				MDC.put(sessionAttr[i], propValue);
 			}
 
 		}
 
 		MDC.put(CLIENT_IP, request.getRemoteHost());
-		MDC.put(SERVER_ID, request.getServerName());
+		// MDC.put(SERVER_ID, request.getServerName());
 		MDC.put(APP_NAME, request.getContextPath());
 	}
-	
-	/**
-	 * 
-	 * @return
-	 */
+
 	private boolean checkLog4jReloadEnable() {
 		String log4jEnable = config.getInitParameter(LOG4J_ENABLE_PARAM);
-		if(log4jEnable == null || log4jEnable.equalsIgnoreCase(DEFAULT_LOG4J_ENABLE)){
+		if (log4jEnable == null || log4jEnable.equalsIgnoreCase(DEFAULT_LOG4J_ENABLE)) {
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
-
-	/**
-	 * 
-	 * @return
-	 */
+	
+	
 	private String getLog4jInitFileName() {
 		String log4jFile = config.getInitParameter(LOG4J_INIT_FILE_PARAM);
-		if(log4jFile == null || log4jFile.equalsIgnoreCase(DEFAULT_LOG4J_INIT_FILE)){
+		if (log4jFile == null || log4jFile.equalsIgnoreCase(DEFAULT_LOG4J_INIT_FILE)) {
 			return DEFAULT_LOG4J_INIT_FILE;
-		}else{
+		} else {
 			return log4jFile;
 		}
 	}
+
 	
-	/**
-	 * 
-	 * @return
-	 */
 	private long getLog4jReloadPeriod() {
 		String period = config.getInitParameter(LOG4J_PERIOD_PARAM);
-		if(period == null){
+		if (period == null) {
 			return 0;
-		}else{
+		} else {
 			return Long.parseLong(period);
 		}
 	}

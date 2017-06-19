@@ -17,11 +17,11 @@ package org.anyframe.logmanager.log4mongo;
 
 import java.util.Random;
 
-import org.apache.log4j.MDC;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -34,7 +34,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class MongoLoggerTest {
 
 	private static final long millis = 500;
-	private static final long DATA_COUNT = 100;
+	private static final long DATA_COUNT = 10;
 	private static final int STRING_LENGTH = 100;
 	
 	@Test

@@ -23,7 +23,7 @@ import org.apache.log4j.spi.LoggingEvent;
  *
  *
  * @author jaehyoung.eum
- *
+ * @deprecated
  */
 public class PatternLayout extends org.apache.log4j.PatternLayout {
 	private final static String DEFAULT_COLUMN_DELIMITER ="|";

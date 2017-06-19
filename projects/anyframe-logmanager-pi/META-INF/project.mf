@@ -4,13 +4,13 @@ anyframe.home=
 #=== Project Information ====
 project.name=anyframe-logmanager-pi
 project.home=/Users/anyframeiam/development/anyframe-svn/trunk/plugin/optional/logmanager/projects/anyframe-logmanager-pi
-project.version=1.0.1
+project.version=1.0.2
 project.type=web
 project.build=maven
 project.template.home=/Users/anyframeiam/.anyframe/templates
 project.template=default
 project.daoframework=springjdbc
-package.name=org.anyframe.plugin.logmanager
+package.name=org.anyframe.plugin
 web.context.path=anyframe-logmanager-pi
 
 #=== DB Information ========

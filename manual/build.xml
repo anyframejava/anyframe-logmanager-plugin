@@ -7,14 +7,14 @@
 	<description>
             This Ant build.xml file is used to transform DocBook XML to various
     </description>
-
+	
 	<!-- set env for using svn id/password -->
 	<property environment="env" />
 	<property name="subv.username" value="${env.SVN_USER}" />
 	<property name="subv.password" value="${env.SVN_PASSWORD}" />
 	
 	<property name="book.name" value="logmanager" />
-	<property name="version" value="1.0.1"/>	
+	<property name="version" value="1.0.2"/>	
 	<property name="service.home" value="E:/workspace/service/${book.name}/${version}" />
 	<property name="service.name" value="anyframe-logmanager" />
 	

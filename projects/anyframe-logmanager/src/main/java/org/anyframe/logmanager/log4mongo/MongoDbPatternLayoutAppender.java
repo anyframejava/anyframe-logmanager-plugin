@@ -27,9 +27,10 @@ import com.mongodb.util.JSON;
 
 /**
  * @author Jaehyoung Eum
- * 
+ * @deprecated use org.anyframe.logmanager.log4j.MongoDbAppender
  */
 public class MongoDbPatternLayoutAppender extends MongoDbAppender {
+	
 	@Override
 	public boolean requiresLayout() {
 		return (true);

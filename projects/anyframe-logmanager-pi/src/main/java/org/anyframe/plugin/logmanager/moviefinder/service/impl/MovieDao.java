@@ -50,11 +50,11 @@ public class MovieDao extends JdbcDaoSupport {
 	int pageUnit;
 
 	@Inject
-	public void setJdbcDaoDataSource(DataSource dataSource) throws Exception {
+	public void setJdbcDaoDataSource(DataSource dataSource) {
 		super.setDataSource(dataSource);
 	}
 
-	public void create(Movie movie) throws Exception {
+	public void create(Movie movie) {
 		// set movie id
 		movie.setMovieId("MV-" + System.currentTimeMillis());
 		String sql = "INSERT INTO MOVIE (movie_id, title, director, genre_id, actors, runtime, release_date, ticket_price, now_playing) "
@@ -69,12 +69,12 @@ public class MovieDao extends JdbcDaoSupport {
 						movie.getNowPlaying() });
 	}
 
-	public void remove(String movieId) throws Exception {
+	public void remove(String movieId) {
 		String sql = "DELETE FROM MOVIE WHERE movie_id = ?";
 		this.getJdbcTemplate().update(sql, new Object[] { movieId });
 	}
 
-	public void update(Movie movie) throws Exception {
+	public void update(Movie movie) {
 		String sql = "UPDATE MOVIE SET title = ?, director = ?, genre_id = ?, actors = ?, runtime = ?, release_date = ?, ticket_price = ?, now_playing = ? WHERE movie_id = ?";
 		this.getJdbcTemplate().update(
 				sql,
@@ -86,7 +86,7 @@ public class MovieDao extends JdbcDaoSupport {
 
 	}
 
-	public Movie get(String movieId) throws Exception {
+	public Movie get(String movieId) {
 		String sql = "SELECT movie_id, title, director, genre_id, release_date, ticket_price, actors, runtime, now_playing FROM MOVIE WHERE movie_id = ?";
 		return this.getJdbcTemplate().queryForObject(sql,
 				new BeanPropertyRowMapper<Movie>(Movie.class) {
@@ -106,7 +106,7 @@ public class MovieDao extends JdbcDaoSupport {
 	 * performance issue. This is a simple example about how to use spring jdbc
 	 * pagination.
 	 */
-	public Page getPagingList(Movie movie, int pageIndex) throws Exception {
+	public Page getPagingList(Movie movie, int pageIndex) {
 		String fromSql = " FROM MOVIE movie, GENRE genre";
 		String CONCAT = "'%" + movie.getTitle() + "%'";
 		String whereSql = " WHERE movie.genre_id = genre.genre_id AND title like "
