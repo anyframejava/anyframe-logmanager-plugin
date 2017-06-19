@@ -9,19 +9,19 @@
 	<parent>
 		<groupId>org.anyframe</groupId>
 		<artifactId>anyframe-plugin-parent</artifactId>
-		<version>5.2.2</version>
+		<version>5.3.0</version>
 	</parent>
 	
 	<groupId>org.anyframe</groupId>
 	<artifactId>anyframe-logmanager</artifactId>
-	<version>1.0.4</version>
+	<version>1.1.0</version>
 	<packaging>jar</packaging>
   
 	<dependencies>
         <dependency>
             <groupId>org.anyframe</groupId>
             <artifactId>anyframe-core</artifactId>
-            <version>1.5.1</version>
+            <version>1.6.0</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -130,6 +130,6 @@
 	    </dependency>
 	</dependencies>
 	<properties>
-	    <spring.version>3.2.2.RELEASE</spring.version>
+	    <spring.version>4.0.0.RELEASE</spring.version>
 	  </properties>
 </project>
