@@ -110,7 +110,7 @@
 								<row>
 									<entry align="center">log4jDynamicReloadPeriod</entry>
 									<entry>log4j.xml 파일의 변경을 체크하는 주기(milliseconds)</entry>
-									<entry align="center">600000</entry>
+									<entry align="center">60000</entry>
 								</row>
 							</tbody>
 						</tgroup>
@@ -137,7 +137,7 @@
 						<title>Spring의 Log4jConfigListener</title>
 						<para>Spring에서는 log4j.xml 파일의 Dynamic Reloading 기능을 제공하기 위해 Log4jConfigListener를 제공한다. 위에서 설명한 MDCServletFilter를 통한 Dynamic Reloding도 가능하지만
 						Spring 기반의 Application일 경우 Spring의 Log4jConfigListener를 정의하여 적용하도록 한다.</para>
-						<programlisting language="xml"><![CDATA[<<web-app...>
+						<programlisting language="xml"><![CDATA[<web-app...>
 	<listener>
 	    <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
 	</listener>
@@ -160,11 +160,11 @@
 		<programlisting language="xml"><![CDATA[<web-app..>
 	<filter>
 		<filter-name>MDCServletFilter</filter-name>
-		<filter-class>org.anyframe.logmanager.web.filter.MDCServletFilter</filter-class>
-	]]><emphasis role="bold"><![CDATA[<init-param>
-		<param-name>sessionAttributes</param-name>
-		<param-value>userId</param-value>
-	</init-param>]]></emphasis><![CDATA[
+		<filter-class>org.anyframe.logmanager.web.filter.MDCServletFilter</filter-class>]]>
+			<emphasis role="bold"><![CDATA[<init-param>
+				<param-name>sessionAttributes</param-name>
+				<param-value>userId</param-value>
+			</init-param>]]></emphasis><![CDATA[
 	</filter>
 	<filter-mapping>
 		<filter-name>MDCServletFilter</filter-name>

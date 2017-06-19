@@ -1,7 +1,7 @@
 	<chapter id="logmanager_dependency">
 		<title>Dependency</title>
 		<para>
-			사용자 Application을 Anyframe Log Manager와 연동하기 위해서는 MongoDB-Driver, Log4Mongo, Anyframe log-manager등의 
+			사용자 Application을 Anyframe Log Manager와 연동하기 위해서는 MongoDB-Driver, Log4Mongo, Anyframe logmanager등의 
 			Dependency를 추가해주도록 한다. 
 		</para>
 		<informaltable>
@@ -19,7 +19,7 @@
 				<tbody>
 					<row>
 						<entry align="center">mongo-java-driver.jar</entry>
-						<entry align="center">2.7.0-rc1</entry>
+						<entry align="center">2.7.2</entry>
 						<entry align="center">Y</entry>
 					</row>
 					<row>
@@ -28,8 +28,8 @@
 						<entry align="center">Y</entry>
 					</row>
 					<row>
-						<entry align="center">anyframe-log-manager.jar</entry>
-						<entry align="center">1.0.0</entry>
+						<entry align="center">anyframe-logmanager.jar</entry>
+						<entry align="center">1.0.1</entry>
 						<entry align="center">Y</entry>
 					</row>
 				</tbody>
@@ -39,7 +39,7 @@
 		<programlisting language="xml"><![CDATA[<dependency>
   <groupId>org.mongodb</groupId>
   <artifactId>mongo-java-driver</artifactId>
-  <version>2.7.0-rc1</version>
+  <version>2.7.2</version>
 </dependency>
 <dependency>
   <groupId>org.log4mongo</groupId>
@@ -48,7 +48,7 @@
 </dependency>
 <dependency>
   <groupId>org.anyframe</groupId>
-  <artifactId>anyframe-log-manager</artifactId>
-  <version>1.0.0</version>
+  <artifactId>anyframe-logmanager</artifactId>
+  <version>1.0.1</version>
 </dependency>]]></programlisting>
 	</chapter>
