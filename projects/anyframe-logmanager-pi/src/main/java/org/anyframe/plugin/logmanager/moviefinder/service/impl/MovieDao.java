@@ -141,7 +141,7 @@ public class MovieDao extends JdbcDaoSupport {
 			final ParameterizedRowMapper<Movie> rowMapper) {
 
 		// determine how many rows are available
-		final int rowCount = jt.queryForInt(sqlCountRows, args);
+		final int rowCount = jt.queryForObject(sqlCountRows, args, Integer.class);
 
 		// create the page object
 		final Page page = new Page(new ArrayList<Movie>(), pageNo, rowCount,

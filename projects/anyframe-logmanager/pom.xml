@@ -3,22 +3,25 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 
                              http://maven.apache.org/maven-v4_0_0.xsd">
+                             
 	<modelVersion>4.0.0</modelVersion>
+	
 	<parent>
 		<groupId>org.anyframe</groupId>
 		<artifactId>anyframe-plugin-parent</artifactId>
-		<version>5.2.1</version>
+		<version>5.2.2</version>
 	</parent>
+	
 	<groupId>org.anyframe</groupId>
 	<artifactId>anyframe-logmanager</artifactId>
-	<version>1.0.3</version>
+	<version>1.0.4</version>
 	<packaging>jar</packaging>
   
 	<dependencies>
         <dependency>
             <groupId>org.anyframe</groupId>
             <artifactId>anyframe-core</artifactId>
-            <version>1.5.0</version>
+            <version>1.5.1</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -59,10 +62,6 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-asm</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -131,6 +130,6 @@
 	    </dependency>
 	</dependencies>
 	<properties>
-	    <spring.version>3.1.1.RELEASE</spring.version>
+	    <spring.version>3.2.2.RELEASE</spring.version>
 	  </properties>
 </project>
